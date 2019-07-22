@@ -1,15 +1,15 @@
 package com.example.myapplication;
 
 public class MusicInfo {
-    String artist;
-    String artistArt;
-    String title;
-    String lyrics;
+    private String artist;
+    private String artistArt;
+    private String title;
+    private String lyrics;
 
-    int timeCode;
-    int duration;
+    private int timeCode;
+    private int duration;
 
-    public MusicInfo() {
+    MusicInfo() {
         this.artist = null;
         this.artistArt = null;
         this.title = null;
@@ -19,24 +19,29 @@ public class MusicInfo {
     }
 
 
-    public String getArtist() { return artist; }
-    public void setArtist(String artist) { this.artist = artist; }
+    String getArtist() { return artist; }
+    void setArtist(String artist) { this.artist = artist; }
 
-    public String getArtistArt() { return artistArt; }
-    public void setArtistArt(String artistArt) { this.artistArt = artistArt; }
+    String getArtistArt() { return artistArt; }
+    void setArtistArt(String artistArt) { this.artistArt = artistArt; }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    String getTitle() { return title; }
+    void setTitle(String title) { this.title = title; }
 
-    public String getLyrics() { return lyrics; }
-    public void setLyrics(String lyrics) { this.lyrics = lyrics; }
+    String getLyrics() { return lyrics; }
+    void setLyrics(String lyrics) { this.lyrics = lyrics; }
 
-    public int getTimeCode() { return timeCode; }
-    public void setTimeCode(int timeCode) { this.timeCode = timeCode; }
+    int getTimeCode() { return timeCode; }
+    void setTimeCode(int timeCode) { this.timeCode = timeCode; }
 
-    public int getDuration() { return duration; }
-    public void setDuration(int duration) { this.duration = duration; }
+    int getDuration() { return duration; }
+    void setDuration(int duration) { this.duration = duration; }
 
+
+    public boolean allEntriesFilled() {
+        return this.artist != null && this.artistArt != null && this.title != null &&
+                this.lyrics != null && this.timeCode != -1 && this.duration != -1;
+    }
 
     @Override
     public String toString() {

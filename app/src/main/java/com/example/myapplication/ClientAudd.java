@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 
+import android.util.Log;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -14,16 +16,19 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class ClientAudd {
+class ClientAudd {
 
-    public static MusicInfo request(File file) {
-        MusicInfo musicInfo = new MusicInfo();
+    public enum Status {
+        SUCCESS, NOT_FOUND, ERROR
+    }
+
+    static Status request(File file, MusicInfo musicInfo) {
         String url = "https://api.audd.io/?return=lyrics,timecode,deezer,itunes";
         String response = getResponse(file, url);
         if (response != null) {
-            parseResponse(response, musicInfo);
+            return parseResponse(response, musicInfo);
         }
-        return musicInfo;
+        return Status.ERROR;
     }
 
     // ================================================================
@@ -51,14 +56,17 @@ public class ClientAudd {
         return null;
     }
 
-    private static void parseResponse(String input, MusicInfo musicInfo) {
+    private static Status parseResponse(String input, MusicInfo musicInfo) {
         JsonObject json = new JsonParser().parse(input).getAsJsonObject();
 
-        String status = json.get("status").getAsString();
-        String result = json.get("result").toString();
+        Log.i("Response", "Response: " + json);
 
-        if (!status.equals("success") || result.equals("null"))
-            return;
+        String status = json.get("status").getAsString();
+        if (status.equals("error") || !status.equals("success")) return Status.ERROR;
+
+        String result = json.get("result").toString();
+        if (result.equals("null")) return Status.NOT_FOUND;
+
 
         JsonObject songInfo = json.get("result").getAsJsonObject();
 
@@ -91,5 +99,6 @@ public class ClientAudd {
             musicInfo.setDuration(itunesInfo.get("trackTimeMillis").getAsInt() / 1000);
             musicInfo.setArtistArt(itunesInfo.get("artworkUrl100").getAsString());
         }
+        return Status.SUCCESS;
     }
 }
